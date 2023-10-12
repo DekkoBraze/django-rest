@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Goods</title>
+</head>
+<body>
+{% if not goods %}
+    <h1>Пусто! Добавьте товар.</h1>
+{% endif %}
+<ul>
+    {% for g in goods %}
+    <li>
+        <h2>{{g.name}}</h2>
+        <h3>Колличество: {{g.amount}}</h3>
+        <h3>Цена: {{g.price}}</h3>
+        <hr>
+    </li>
+    {% endfor %}
+</ul>
+<h3><a href="{% url 'new_good' %}?token={{token}}">Добавить новый товар</a></h3>
+</body>
+</html>
