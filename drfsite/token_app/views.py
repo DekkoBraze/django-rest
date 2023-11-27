@@ -26,7 +26,8 @@ def view_goods(request):
     if not token:
         return HttpResponse('Token must be presented', status=401)
     if token in db_tokens:
-        goods = Good.objects.all()
+        token_db = Token.objects.get(token=token)
+        goods = token_db.goods.all()
         return render(request, 'token_app/goods.html', {'goods': goods, 'token': token})
     else:
         return HttpResponse('Token is invalid', status=401)
@@ -42,6 +43,7 @@ def new_good(request):
         if request.method == 'POST':
             form = GoodForm(request.POST)
             if form.is_valid():
+                form.cleaned_data['token'] = Token.objects.get(token=token)
                 Good.objects.create(**form.cleaned_data)
                 url = '/goods/?token=' + token
                 return redirect(url)
@@ -51,5 +53,3 @@ def new_good(request):
         return render(request, 'token_app/create_goods.html', context={'form': form, 'token': token})
     else:
         return HttpResponse('Token is invalid', status=401)
-
-#"token": "0e85acb2-330d-4479-907d-d8799c29bfa8"
